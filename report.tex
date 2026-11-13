@@ -1,0 +1,121 @@
+\documentclass[a4paper, titlepage]{article}
+\usepackage[T1]{fontenc}
+\usepackage{times}
+\usepackage[english]{babel}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{parskip} 
+\usepackage[style=apa, backend=biber,
+alldates=comp, labeldate=comp,
+]{biblatex}
+\setlength\bibitemsep{\baselineskip}
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage{appendix}
+\usepackage{csquotes}
+\usepackage{bashful}
+\usepackage{svg}
+
+\addtolength{\oddsidemargin}{-5mm}
+\addtolength{\evensidemargin}{-5mm}
+\addtolength{\textwidth}{10mm}
+
+%Add the reference source to the document
+\addbibresource{refs.bib}
+\DeclareFieldFormat{formaturl}{\newline #1}
+\renewbibmacro*{url+urldate}{
+\printtext[formaturl]{
+  \iffieldundef{urlyear}
+    {}
+    {\setunit*{\addspace}
+     \printtext[]{\printurldate}}}
+  \texttt{\printfield{url}}}
+
+\title{Peer-to-Peer Costume Rentals}
+\author{Hadar~Eklund \\
+        Rufus~Kogg~Röjder \\
+        Viktor~Lindström \\
+        Felix~Ohrgren \\
+        Oskar~Olofsson \\
+        Gustaf~Wahlgren}
+
+        
+\begin{document}
+
+\maketitle
+
+\section{Executive summary}
+Many students regularly go to parties, and need costumes. Buying costumes can be expensive, and can be difficult to fit in a tight student budget. At the same time, costumes are rarely used multiple times. To solve both of these problems, we propose an app for peer-to-peer costume rentals.
+
+The app will have two, potentially overlapping user groups. We have the users that want to rent costumes, and the users that have costumes to rent out. Our business model consists of taking a small commission, with a large part of the rental cost going to the user who rents out their costume.
+
+By catering only to students, we get a userbase which is easier to direct our advertising to. Since we as a business team are part of the targeted customer base, we know what to focus on. Additionally, we have not found any clear competitors that focus only on costumes. This, together with limiting our target area to Lund, makes us believe that our solution has commercial potential.
+
+\section{Management team}
+The team consists of six year three computer science and engineering students. Even though none of the members has experience operating a business, the team is well suited for this venture. The members have a few unique advantages in this field: all members know the party scene in Lund and have experienced the pain of finding a costume themselves. The team also has a large network of potential customers in Lund. Another strength of the team is the technical skill, the team has all the prerequisite programming knowledge required to create the product. The one competence gap in the management team is the lack of experience in running a business.
+
+\cite{https://doi.org/10.1111/j.1467-8616.2010.00719.x}
+
+\section{Business model}
+The business model aims at solving two problems students in Lund find frustrating today at once. Expensively bought costumes sit at home unused forever and the struggle to find a cheap costume for a party. The app will provide a marketplace joining these problems together into a solution, where a small commission is payed every rental.
+
+\subsection{Problem to solve}
+There are currently two problems with costume parties for students in Lund. It is expensive to buy new costumes and not very environmentally friendly as well as economically sensible if is only used once or twice in total. About one out of 5 adults in Sweden have bought a piece of clothing even though they were only going to use it a handful of times in total before throwing it away (\cite{naturskyddsforeningen}). Furthermore, among young people up to 66\% buy clothes in preperation for a party, with the intention of not using it more than a handful of times. Considering that young students are living on a tight budget of only 13 592 swedish krona per month (\cite{csn}), this is not sustainable in economic terms either.
+
+This view is also shared among students we have spoken to in mom tests. Many of the interviewees would cite economic reasons to not owning very many costumers or to borrowing from friends. One of the people we talked to mentioned that they only owned small accessories and hats intead of full fletched costomes. This was because she though it was very expensive to buy an entire costume for just one party, since even though she was going to parties quite frequently, costumes are very specific and rarely fit more than one or two themes. Another interviewee mentioned that when he was buying costimes, they should be able to be worn daily, to save money.
+
+\subsection{Solution and unique value proposition}
+The solution to this problem is to have students use a local mobile app to rent costumes to eachother cheaply, creating a tight, trustworth network for young people to use before parties. This is supposed to be peer to peer, all connections between people are to be created on the app and pruchases can be handled via these connections. In this way, students can easily rent costumes and earn back their money. 
+
+What makes this solution unique is that it is built by local students who have a wide network of potential users and candidates for a pilot program themselves. This is helpful because it speeds up the development of new iterations, which adapts the product according to the special needs of local parties and traditions.
+
+\begin{figure}[htbp]
+  \centering
+  \includesvg[width=0.7\textwidth]{leancanvas}
+  \caption{Initial Lean Canvas for the costume rental service.}
+  \label{fig:leancanvas}
+\end{figure}
+
+\subsection{Customer Validation}
+One MOM test thought it would be a good idea and could use it as a renter. Had one costume he never used. (Change this after more MOM tests)
+
+\subsection{Customer segments and early adopters}
+Lund is one of Sweden's most party friendly universities with around 46 000 students and 31\% international students \parencite{lu-facts} with 13 nations \parencite{lu-nations} with active student life. For the lender side of the app, customers targeted are students that already bought a variety of costumes that rarely gets reused. Since the average economy of a student is low and there are a lot of students in Lund, they are considered the easiest target group. The MOM interviews concluded that students who are most likely to rent on the other hand are environmentally aware or economic students that wants to show up in an ambitious costume. 
+
+Another customer segment is international students. They have more incentive to rent a costume since most travel with limited baggage and therefore can't bring home costumes after buying. They are also more likely to have a limited wardrobe and might be unsure of how to best get costumes in Sweden. Thus the costume problem is presumed to be biggest among international students making them an attractive group of early adopters. The claim is supported by 2/2 MOM interviews of international students saying they had problems finding a suit for a sittning and had to buy new ones they didn't want to keep.
+
+\subsection{Channels and early traction}
+Before renters are acquired, lenders are needed. A moderate number of lender profiles consisting of the founders and friends of founders will be on display at start to avoid the risk of customers being discouraged by the app looking dead. Furthermore there are a lot of methods to reach out to the Swedish students. Word of mouth, facebook posts, posters, commercial posts in student apps, letters in mailboxes, social media accounts are all methods that will be used to jump start the app once it has a few lenders in place.
+
+The natural step to acquire renters is therefore commercial where international students get information. A partnership with Lund Universtiy is desireable since students read their websites as trusted and official. If that is not possible, international mentors mentioning the app in whatsapp groups, word of mouth and posters close to international students' living quarters is assumed as sufficient to get a strong early foothold in the market. 
+
+\subsection{Revenue, pricing and costs}
+Revenue will come form in two parts: commission and insurance. We will take a commission on each purchase, this commission should be priced as low as possible in order to prevent customers from leaving our platform. The commission will be set as a percentage of each rental. The exact percentage is yet to be determined but we aim for it to be between 5\% and 10\%. The insurance will be a separate optional charge, the value of the insurance will be based of the sellers evaluation of their costume. We will employ a professional economist or an external insurance company to help determine a good fee for the renter to pay based on this evaluation.
+
+
+%asså d e många frågor som är samma här som 3.2. hoppar att repetera dem tillsvidare
+\section{Market analysis}
+Analysis of the market in Lund shows that there are natural competitors to our business. "Klädkammaren" and "Hygglo" are the first, and second results for a student using Google searching for "utklädnad lund", while physically in Lund. Butterick´s is also a competitor on the first page of results. Butterick´s solves the same problem in the sense that a customer can purchase a costume, but the assessment is that this is not the same customer base as the one targeted by this business model. The target audience is however shared with both Hygglo and Klädkammaren, both of which provide a costume renting service. 
+
+Klädkammaren has is competing for students in Lund, offering a discount for AF-members. What separates the business models is mainly the fact that Klädkammaren is not peer-to-peer. This leads to them having a overhead, which could affect their profits. The customer would have to physically go to AF-borgen, during very restrictive opening hours (4pm-7pm mondays), and hope that Klädkammaren have the sort of costume they are looking, in the right size. This is obvuisly quite a hassle, especially if said student happen not to plan for the weekend on a Monday. A much easier solution is the one proposed in this paper. In which, a customer could simply sort costumes by distance, sizes, and themes, contact the hire out, and pick it up.  
+
+Hygglo might be the most obvious, and most similar competitor. Hygglo is a general peer-to-peer rent out service. Meaning they do not specifically specialize in the costume rental industry. The main problem with Hygglo in Lund is their failure to acually capture the market, especially from the hire out perspective. At the time of writing (2026-11-12), Hygglo has a grand total of four costumes listed in Lund. By having a specialized platform for costumes, alongside directed initial marketing for hire outs, this business plans to capture the customers and become the go-to place for costume rentals. 
+
+\newpage
+
+\printbibliography[heading=bibintoc]
+
+\appendixpage
+
+\section*{Contribution statement}
+The contributors for draft one assures the reader that all the research and writing in this paper is produced by humans. AI will only be used for prototyping, not for any writing. The following people agrees with this statement an has done following work:
+
+\begin{itemize}
+    \item Gustaf Wahlgre: I wrote section four, Market analysis. 2h 42m spent.
+    \item Felix Ohrgren: I wrote section one, Executive summary
+    \item Viktor Lindström: I wrote section two, Management team. 1h 30m spent.
+    \item Oskar Olofsson: I wrote section three regarding problem, solution, and unique value proposition. 2h 21m 5s spent.
+    \item Hadar Eklund: I wrote section 3.4 and 3.5 about customer segments and traction. 2h 15m spent.
+    \item Rufus Kogg RÖjder I wrote section 3.6 about revenue, pricing and cos
+\end{itemize}
+
+
+\end{document}

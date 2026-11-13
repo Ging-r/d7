@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  passwordHash    String
+  name            String
+  bio             String   @default("")
+  isAdmin         Boolean  @default(false)
+  // Stripe Connect Express account that receives rental payouts.
+  stripeAccountId String?
+  payoutsEnabled  Boolean  @default(false)
+  createdAt       DateTime @default(now())
+
+  sessions        Session[]
+  listings        Listing[]
+  rentals         Booking[] @relation("Renter")
+  ownedBookings   Booking[] @relation("Owner")
+  messages        Message[]
+  reviewsWritten  Review[]  @relation("ReviewAuthor")
+  reviewsReceived Review[]  @relation("ReviewSubject")
+}
+
+model Session {
+  // SHA-256 of the token stored in the session cookie.
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Listing {
+  id            String   @id @default(cuid())
+  ownerId       String
+  owner         User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  title         String
+  description   String
+  theme         String
+  size          String
+  // All amounts are whole SEK.
+  price         Int // flat price covering `includedDays` days
+  includedDays  Int      @default(3)
+  extraDayPrice Int? // per day beyond includedDays; null means longer rentals aren't allowed
+  deposit       Int
+  value         Int? // owner's estimate of what the costume is worth
+  // Exact pickup pin, only shown to the renter once a booking is paid.
+  lat           Float
+  lng           Float
+  // Randomly offset copy of the pin, shown publicly and used for distance sorting.
+  publicLat     Float
+  publicLng     Float
+  areaLabel     String   @default("")
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  photos   Photo[]
+  bookings Booking[]
+
+  @@index([ownerId])
+  @@index([active, createdAt])
+}
+
+model Photo {
+  id        String  @id @default(cuid())
+  listingId String
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  filename  String
+  position  Int     @default(0)
+
+  @@index([listingId])
+}
+
+model Booking {
+  id        String  @id @default(cuid())
+  listingId String
+  listing   Listing @relation(fields: [listingId], references: [id])
+  renterId  String
+  renter    User    @relation("Renter", fields: [renterId], references: [id])
+  ownerId   String
+  owner     User    @relation("Owner", fields: [ownerId], references: [id])
+
+  // Calendar dates (YYYY-MM-DD, Europe/Stockholm). The costume is busy from
+  // startDate up to, but not including, endDate (the return day).
+  startDate String
+  endDate   String
+  days      Int
+
+  // Price snapshot in whole SEK, fixed when the request is made.
+  rentalAmount  Int
+  depositAmount Int
+  platformFee   Int
+  ownerPayout   Int
+
+  // See BookingStatus in src/lib/bookings.ts
+  status        String
+  cancelledById String?
+
+  acceptedAt  DateTime?
+  paidAt      DateTime?
+  pickedUpAt  DateTime?
+  completedAt DateTime?
+  cancelledAt DateTime?
+
+  // Damage claim, opened by the owner after pickup and resolved by an admin.
+  claimAmount     Int?
+  claimReason     String?
+  claimPaidAmount Int?
+  resolutionNote  String?
+
+  // Stripe references. Money movements are reconciled by settleBooking(),
+  // so a null id on a due movement means "not done yet".
+  checkoutSessionId String?
+  paymentIntentId   String?
+  chargeId          String?
+  payoutTransferId  String?
+  refundId          String?
+  depositRefundId   String?
+  claimTransferId   String?
+  settlementError   String?
+
+  renterLastReadAt DateTime?
+  ownerLastReadAt  DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  messages Message[]
+  reviews  Review[]
+
+  @@index([listingId, status])
+  @@index([renterId])
+  @@index([ownerId])
+  @@index([status])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  bookingId String
+  booking   Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  // null for system messages ("Request accepted", etc.)
+  senderId  String?
+  sender    User?    @relation(fields: [senderId], references: [id])
+  body      String
+  createdAt DateTime @default(now())
+
+  @@index([bookingId, createdAt])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  bookingId String
+  booking   Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation("ReviewAuthor", fields: [authorId], references: [id])
+  subjectId String
+  subject   User     @relation("ReviewSubject", fields: [subjectId], references: [id])
+  rating    Int
+  comment   String   @default("")
+  createdAt DateTime @default(now())
+
+  @@unique([bookingId, authorId])
+  @@index([subjectId])
+}

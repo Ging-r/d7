@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --color-brand-50: #f6f2ff;
+  --color-brand-100: #ece4ff;
+  --color-brand-200: #d9cbff;
+  --color-brand-300: #bba2ff;
+  --color-brand-500: #7c4dff;
+  --color-brand-600: #6a35f0;
+  --color-brand-700: #5a26d6;
+  --color-brand-800: #4a20ad;
+  --color-brand-900: #2e1470;
+}
+
+@layer base {
+  body {
+    @apply bg-stone-50 text-stone-900 antialiased;
+  }
+  ::selection {
+    @apply bg-brand-200;
+  }
+}
+
+/* Reusable building blocks; declared as utilities so they compose with @apply and variants. */
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition
+    disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500;
+}
+@utility btn-primary {
+  @apply btn bg-brand-600 text-white hover:bg-brand-700;
+}
+@utility btn-secondary {
+  @apply btn border border-stone-300 bg-white text-stone-800 hover:bg-stone-100;
+}
+@utility btn-danger {
+  @apply btn border border-red-200 bg-white text-red-700 hover:bg-red-50;
+}
+@utility btn-ghost {
+  @apply btn text-stone-700 hover:bg-stone-100;
+}
+@utility input {
+  @apply block w-full rounded-xl border border-stone-300 bg-white px-3 py-2 text-base text-stone-900 placeholder:text-stone-400
+    focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none sm:text-sm;
+}
+@utility label {
+  @apply mb-1 block text-sm font-medium text-stone-700;
+}
+@utility hint {
+  @apply mt-1 text-xs text-stone-500;
+}
+@utility card {
+  @apply rounded-2xl border border-stone-200 bg-white;
+}
+@utility page-title {
+  @apply text-2xl font-bold tracking-tight text-stone-900 sm:text-3xl;
+}
+
+/* Keep Leaflet maps below the sticky header and dropdowns. */
+.leaflet-container {
+  z-index: 0;
+  font: inherit;
+}
