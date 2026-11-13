@@ -6,7 +6,9 @@ import { Circle, CircleMarker, MapContainer, TileLayer, useMap, useMapEvents } f
 import { LUND_CENTER } from "@/lib/config";
 import { PUBLIC_AREA_RADIUS_M, type LatLng } from "@/lib/geo";
 
-const BRAND = "#6a35f0";
+// Mirrors --color-ink and --color-tag in globals.css. Leaflet sets these as SVG attributes, where CSS variables don't resolve.
+const INK = "#1a1814";
+const TAG = "#ffd43b";
 
 export interface LeafletMapProps {
   /** "pick": click to place a pin. "area": approximate circle. "pin": exact meeting point. */
@@ -25,7 +27,7 @@ export default function LeafletMap({ mode, point, onPick, focus, className = "h-
       center={center}
       zoom={mode === "pick" ? (point ? 15 : 13) : mode === "area" ? 14 : 16}
       scrollWheelZoom={false}
-      className={`w-full rounded-xl ${className}`}
+      className={`w-full rounded-md ${className}`}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -34,10 +36,10 @@ export default function LeafletMap({ mode, point, onPick, focus, className = "h-
       {mode === "pick" && onPick && <ClickToPick onPick={onPick} />}
       {focus && <PanTo point={focus} />}
       {point && mode === "area" && (
-        <Circle center={point} radius={PUBLIC_AREA_RADIUS_M} pathOptions={{ color: BRAND, fillColor: BRAND, fillOpacity: 0.15, weight: 1.5 }} />
+        <Circle center={point} radius={PUBLIC_AREA_RADIUS_M} pathOptions={{ color: INK, fillColor: TAG, fillOpacity: 0.4, weight: 2 }} />
       )}
       {point && mode !== "area" && (
-        <CircleMarker center={point} radius={9} pathOptions={{ color: "white", weight: 3, fillColor: BRAND, fillOpacity: 1 }} />
+        <CircleMarker center={point} radius={9} pathOptions={{ color: INK, weight: 3, fillColor: TAG, fillOpacity: 1 }} />
       )}
     </MapContainer>
   );

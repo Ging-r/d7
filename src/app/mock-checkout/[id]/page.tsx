@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { completeMockPaymentAction } from "@/actions/bookings";
 import { ActionButton } from "@/components/forms";
+import { Alert, ReceiptRow } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
 import { formatDateRange } from "@/lib/dates";
 import { db } from "@/lib/db";
@@ -28,32 +29,28 @@ export default async function MockCheckoutPage({
 
   return (
     <div className="mx-auto flex max-w-md flex-col gap-6 py-6">
-      <div className="rounded-xl bg-amber-100 px-4 py-3 text-sm text-amber-900">
+      <Alert tone="warn">
         <strong>Demo checkout.</strong> This page stands in for Stripe while the app runs without Stripe keys. No real money moves.
-      </div>
-      <div className="card flex flex-col gap-4 p-6">
-        <h1 className="text-xl font-bold">{booking.listing.title}</h1>
-        <p className="text-sm text-stone-600">{formatDateRange(booking.startDate, booking.endDate)}</p>
-        <dl className="flex flex-col gap-1 text-sm">
-          <div className="flex justify-between">
-            <dt>Rental</dt>
-            <dd>{formatSEK(booking.rentalAmount)}</dd>
-          </div>
-          <div className="flex justify-between text-stone-500">
-            <dt>Refundable deposit</dt>
-            <dd>{formatSEK(booking.depositAmount)}</dd>
-          </div>
-          <div className="mt-1 flex justify-between border-t border-stone-100 pt-1 font-semibold">
-            <dt>Total</dt>
-            <dd>{formatSEK(booking.rentalAmount + booking.depositAmount)}</dd>
-          </div>
+      </Alert>
+      <div className="card flex flex-col gap-6 p-6">
+        <div>
+          <p className="eyebrow">You&apos;re paying for</p>
+          <h1 className="display mt-2 text-4xl">{booking.listing.title}</h1>
+          <p className="mt-2 text-sm text-ink-soft">{formatDateRange(booking.startDate, booking.endDate)}</p>
+        </div>
+        <dl className="flex flex-col gap-1.5 text-sm">
+          <ReceiptRow label="Rental" value={formatSEK(booking.rentalAmount)} />
+          <ReceiptRow label="Refundable deposit" value={formatSEK(booking.depositAmount)} muted />
+          <ReceiptRow label="Total" value={formatSEK(booking.rentalAmount + booking.depositAmount)} total />
         </dl>
-        <ActionButton action={completeMockPaymentAction.bind(null, booking.id, session)} pendingText="Paying…" className="btn-primary py-3">
-          Pay {formatSEK(booking.rentalAmount + booking.depositAmount)} (simulated)
-        </ActionButton>
-        <Link href={`/bookings/${booking.id}`} className="btn-ghost">
-          Back to booking
-        </Link>
+        <div className="flex flex-col gap-2">
+          <ActionButton action={completeMockPaymentAction.bind(null, booking.id, session)} pendingText="Paying…" className="btn-primary btn-lg w-full">
+            Pay {formatSEK(booking.rentalAmount + booking.depositAmount)} (simulated)
+          </ActionButton>
+          <Link href={`/bookings/${booking.id}`} className="btn-ghost">
+            Back to booking
+          </Link>
+        </div>
       </div>
     </div>
   );

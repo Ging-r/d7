@@ -47,7 +47,7 @@ export function AuthForm({
         {mode === "signup" && <p className="hint">At least 8 characters.</p>}
       </div>
       <FormMessage state={state} />
-      <SubmitButton pending={pending} pendingText={mode === "signup" ? "Creating account…" : "Logging in…"} className="btn-primary py-3">
+      <SubmitButton pending={pending} pendingText={mode === "signup" ? "Creating account…" : "Logging in…"} className="btn-primary btn-lg">
         {mode === "signup" ? "Create account" : "Log in"}
       </SubmitButton>
     </form>

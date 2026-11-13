@@ -12,17 +12,15 @@ export default async function SignupPage({ searchParams }: { searchParams: Promi
   const next = safeNext((await searchParams).next);
   if (await getCurrentUser()) redirect(next);
   return (
-    <div className="mx-auto flex max-w-sm flex-col gap-6 py-6">
-      <div className="text-center">
+    <div className="mx-auto flex max-w-sm flex-col gap-8 py-6 sm:py-12">
+      <div>
         <h1 className="page-title">Join {APP_NAME}</h1>
-        <p className="mt-1 text-sm text-stone-600">Rent costumes from students nearby, or rent out your own.</p>
+        <p className="mt-3 text-ink-soft">Rent costumes from students nearby, or rent out your own.</p>
       </div>
-      <div className="card p-6">
-        <AuthForm action={signup} mode="signup" next={next} />
-      </div>
-      <p className="text-center text-sm text-stone-600">
+      <AuthForm action={signup} mode="signup" next={next} />
+      <p className="border-t border-line pt-5 text-sm text-ink-soft">
         Already have an account?{" "}
-        <Link href={`/login?next=${encodeURIComponent(next)}`} className="font-semibold text-brand-700 hover:underline">
+        <Link href={`/login?next=${encodeURIComponent(next)}`} className="link text-ink">
           Log in
         </Link>
       </p>

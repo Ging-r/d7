@@ -2,7 +2,9 @@
 
 import { useActionState, useEffect, useRef, useState } from "react";
 import { FormMessage, SubmitButton, submitWithoutReset } from "@/components/forms";
+import { Icon } from "@/components/Icon";
 import { CostumeMap } from "@/components/map/CostumeMap";
+import { Section } from "@/components/ui";
 import { MAX_PHOTOS, SIZES, THEMES } from "@/lib/config";
 import type { ActionState } from "@/lib/errors";
 import type { LatLng } from "@/lib/geo";
@@ -98,19 +100,20 @@ export function ListingForm({
         // Photos live in state so they can be previewed and removed before upload.
         for (const { file } of newFiles) formData.append("photos", file);
       })}
-      className="flex flex-col gap-8"
+      className="flex flex-col gap-10"
     >
       <Section title="Photos" description="Bright photos of the whole costume get the most requests. The first photo is the cover.">
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-          {keptPhotos.map((p) => (
-            <PhotoThumb key={p.id} src={photoUrl(p.filename)} onRemove={() => setKeptPhotos((ps) => ps.filter((x) => x.id !== p.id))}>
+          {keptPhotos.map((p, i) => (
+            <PhotoThumb key={p.id} src={photoUrl(p.filename)} cover={i === 0} onRemove={() => setKeptPhotos((ps) => ps.filter((x) => x.id !== p.id))}>
               <input type="hidden" name="keepPhotos" value={p.id} />
             </PhotoThumb>
           ))}
-          {newFiles.map((p) => (
+          {newFiles.map((p, i) => (
             <PhotoThumb
               key={p.url}
               src={p.url}
+              cover={i === 0 && keptPhotos.length === 0}
               onRemove={() => {
                 URL.revokeObjectURL(p.url);
                 setNewFiles((fs) => fs.filter((f) => f !== p));
@@ -118,9 +121,9 @@ export function ListingForm({
             />
           ))}
           {photoCount < MAX_PHOTOS && (
-            <label className="flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-stone-300 text-stone-500 hover:border-brand-500 hover:text-brand-700">
-              <span className="text-2xl">＋</span>
-              <span className="text-xs font-medium">Add photo</span>
+            <label className="flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-md border-2 border-dashed border-line-strong text-muted transition-colors hover:border-ink hover:text-ink has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ink">
+              <Icon name="plus" className="size-6" />
+              <span className="text-xs font-semibold">Add photo</span>
               <input
                 type="file"
                 accept="image/jpeg,image/png,image/webp"
@@ -166,7 +169,7 @@ export function ListingForm({
                 </option>
                 {THEMES.map((t) => (
                   <option key={t.id} value={t.id}>
-                    {t.emoji} {t.label}
+                    {t.label}
                   </option>
                 ))}
               </select>
@@ -187,7 +190,7 @@ export function ListingForm({
         </div>
       </Section>
 
-      <Section title="Price" description="One flat price covers a rental of up to the number of days you choose — perfect for a party weekend.">
+      <Section title="Price" description="One flat price covers a rental of up to the number of days you choose. Three days suits a party weekend.">
         <div className="grid grid-cols-2 gap-4">
           <Field label="Price per rental (kr)" htmlFor="price">
             <input
@@ -247,7 +250,7 @@ export function ListingForm({
           </Field>
         </div>
         {payout != null && (
-          <p className="mt-3 rounded-lg bg-brand-50 px-3 py-2 text-sm text-brand-900">
+          <p className="mt-4 rounded-md bg-tag-wash px-3 py-2.5 text-sm">
             You receive <strong>{formatSEK(payout)}</strong> per rental of up to {includedDays || "?"} days, after the {feePercent}% platform fee.
           </p>
         )}
@@ -261,11 +264,19 @@ export function ListingForm({
           <CostumeMap mode="pick" point={pin} onPick={setPin} focus={focus} className="h-72" />
           <div className="flex flex-wrap items-center gap-3">
             <button type="button" className="btn-secondary" onClick={useMyLocation} disabled={locating}>
-              {locating ? "Locating…" : "📍 Use my location"}
+              <Icon name="locate" />
+              {locating ? "Locating…" : "Use my location"}
             </button>
-            <span className="text-sm text-stone-500">{pin ? "Pin placed ✓" : "No pin yet"}</span>
+            {pin ? (
+              <span className="inline-flex items-center gap-1 text-sm font-semibold text-ok">
+                <Icon name="check" className="size-4 stroke-[2.5]" />
+                Pin placed
+              </span>
+            ) : (
+              <span className="text-sm text-muted">No pin yet</span>
+            )}
           </div>
-          {locateError && <p className="text-sm text-red-700">{locateError}</p>}
+          {locateError && <p className="text-sm text-signal">{locateError}</p>}
           <input type="hidden" name="lat" value={pin?.lat ?? ""} />
           <input type="hidden" name="lng" value={pin?.lng ?? ""} />
           <Field label="Area name (optional)" htmlFor="areaLabel" hint='Shown on your listing, e.g. "Delphi" or "near LTH".'>
@@ -275,15 +286,15 @@ export function ListingForm({
       </Section>
 
       {mode === "edit" && (
-        <label className="flex items-center gap-3 text-sm">
-          <input type="checkbox" name="active" defaultChecked={initial.active} className="size-4 accent-brand-600" />
+        <label className="flex items-center gap-3 border-t-[3px] border-ink pt-5 text-sm font-medium">
+          <input type="checkbox" name="active" defaultChecked={initial.active} className="size-4 accent-ink" />
           Show this costume in search results
         </label>
       )}
 
-      <div className="sticky bottom-0 -mx-4 flex flex-col gap-3 border-t border-stone-200 bg-stone-50/95 px-4 py-4 backdrop-blur sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0">
+      <div className="sticky bottom-0 -mx-4 flex flex-col gap-3 border-t border-line bg-paper px-4 py-4 sm:static sm:mx-0 sm:border-t-[3px] sm:border-ink sm:px-0 sm:pt-5 sm:pb-0">
         <FormMessage state={state} />
-        <SubmitButton pending={pending} pendingText={mode === "create" ? "Publishing…" : "Saving…"} className="btn-primary w-full py-3 sm:w-auto">
+        <SubmitButton pending={pending} pendingText={mode === "create" ? "Publishing…" : "Saving…"} className="btn-primary btn-lg w-full sm:w-auto sm:self-start">
           {mode === "create" ? "Publish costume" : "Save changes"}
         </SubmitButton>
       </div>
@@ -299,32 +310,24 @@ function useRevokeOnUnmount(files: { url: string }[]) {
   useEffect(() => () => latest.current.forEach((f) => URL.revokeObjectURL(f.url)), []);
 }
 
-function PhotoThumb({ src, onRemove, children }: { src?: string; onRemove: () => void; children?: React.ReactNode }) {
+function PhotoThumb({ src, cover, onRemove, children }: { src?: string; cover?: boolean; onRemove: () => void; children?: React.ReactNode }) {
   return (
-    <div className="relative aspect-square overflow-hidden rounded-xl bg-stone-200">
+    <div className="relative aspect-square overflow-hidden rounded-md bg-line">
       {/* eslint-disable-next-line @next/next/no-img-element -- local previews and our own uploads */}
       {src && <img src={src} alt="" className="size-full object-cover" />}
+      {cover && (
+        <span className="absolute bottom-1.5 left-1.5 rounded-sm bg-tag px-1.5 py-1 text-[10px] leading-none font-semibold tracking-wide uppercase">Cover</span>
+      )}
       <button
         type="button"
         onClick={onRemove}
-        className="absolute top-1 right-1 flex size-7 items-center justify-center rounded-full bg-black/60 text-sm text-white hover:bg-black/80"
+        className="absolute top-1.5 right-1.5 flex size-7 items-center justify-center rounded-full bg-ink/75 text-paper hover:bg-ink"
         aria-label="Remove photo"
       >
-        ✕
+        <Icon name="x" />
       </button>
       {children}
     </div>
-  );
-}
-
-function Section({ title, description, children }: { title: string; description?: string; children: React.ReactNode }) {
-  return (
-    <section className="card p-4 sm:p-6">
-      <h2 className="text-lg font-semibold">{title}</h2>
-      {description && <p className="mt-1 mb-4 text-sm text-stone-600">{description}</p>}
-      {!description && <div className="mb-4" />}
-      {children}
-    </section>
   );
 }
 

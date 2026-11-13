@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { deleteListingAction, updateListingAction } from "@/actions/listings";
 import { ActionButton } from "@/components/forms";
 import { ListingForm } from "@/components/ListingForm";
+import { BackLink } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
 import { PLATFORM_FEE_PERCENT } from "@/lib/config";
 import { db } from "@/lib/db";
@@ -19,7 +20,8 @@ export default async function EditCostumePage({ params }: { params: Promise<{ id
   if (!listing || listing.ownerId !== user.id) notFound();
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col gap-6">
+    <div className="mx-auto flex max-w-4xl flex-col gap-8">
+      <BackLink href={`/costumes/${listing.id}`}>Back to the costume</BackLink>
       <h1 className="page-title">Edit costume</h1>
       <ListingForm
         action={updateListingAction.bind(null, listing.id)}
@@ -42,9 +44,9 @@ export default async function EditCostumePage({ params }: { params: Promise<{ id
         feePercent={PLATFORM_FEE_PERCENT}
         mode="edit"
       />
-      <p className="text-sm text-stone-500">Price changes only apply to new requests. Existing bookings keep the price they were made at.</p>
+      <p className="text-sm text-muted">Price changes only apply to new requests. Existing bookings keep the price they were made at.</p>
       {listing._count.bookings === 0 && (
-        <div className="border-t border-stone-200 pt-6">
+        <div className="border-t border-line pt-6">
           <ActionButton
             action={deleteListingAction.bind(null, listing.id)}
             confirm="Delete this costume permanently?"

@@ -11,14 +11,12 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const next = safeNext((await searchParams).next);
   if (await getCurrentUser()) redirect(next);
   return (
-    <div className="mx-auto flex max-w-sm flex-col gap-6 py-6">
-      <h1 className="page-title text-center">Welcome back</h1>
-      <div className="card p-6">
-        <AuthForm action={login} mode="login" next={next} />
-      </div>
-      <p className="text-center text-sm text-stone-600">
+    <div className="mx-auto flex max-w-sm flex-col gap-8 py-6 sm:py-12">
+      <h1 className="page-title">Log in</h1>
+      <AuthForm action={login} mode="login" next={next} />
+      <p className="border-t border-line pt-5 text-sm text-ink-soft">
         New here?{" "}
-        <Link href={`/signup?next=${encodeURIComponent(next)}`} className="font-semibold text-brand-700 hover:underline">
+        <Link href={`/signup?next=${encodeURIComponent(next)}`} className="link text-ink">
           Create an account
         </Link>
       </p>

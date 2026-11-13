@@ -194,6 +194,12 @@ export async function searchListings(filters: SearchFilters, limit = 120) {
 
 export type ListingSummary = Awaited<ReturnType<typeof searchListings>>[number];
 
+/** Number of visible listings per theme id. Themes without listings are absent. */
+export async function countListingsByTheme(): Promise<Map<string, number>> {
+  const groups = await db.listing.groupBy({ by: ["theme"], where: { active: true }, _count: { _all: true } });
+  return new Map(groups.map((g) => [g.theme, g._count._all]));
+}
+
 // ---------------------------------------------------------------------------
 // Ratings
 

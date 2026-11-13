@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { Icon } from "@/components/Icon";
 
 /** Asks for the browser's location and re-runs the search sorted by distance. */
 export function NearMeButton({ className = "btn-secondary", basePath = "/costumes" }: { className?: string; basePath?: string }) {
@@ -41,16 +42,20 @@ export function NearMeButton({ className = "btn-secondary", basePath = "/costume
   if (active && basePath === "/costumes") {
     return (
       <button type="button" onClick={clear} className={className}>
-        📍 Near you · clear
+        <Icon name="locate" />
+        Near you
+        <Icon name="x" className="size-3.5 text-muted" />
+        <span className="sr-only">Clear location</span>
       </button>
     );
   }
   return (
     <div className="flex flex-col items-start gap-1">
       <button type="button" onClick={locate} disabled={state === "locating"} className={className}>
-        {state === "locating" ? "Finding you…" : "📍 Near me"}
+        <Icon name="locate" />
+        {state === "locating" ? "Finding you…" : "Near me"}
       </button>
-      {state === "error" && <span className="text-xs text-red-700">Location unavailable. Allow location access and try again.</span>}
+      {state === "error" && <span className="text-xs text-signal">Location unavailable. Allow location access and try again.</span>}
     </div>
   );
 }

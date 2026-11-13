@@ -28,14 +28,14 @@ export function SubmitButton({
 export function FormMessage({ state, success }: { state: ActionState; success?: string }) {
   if (state?.error) {
     return (
-      <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800">
+      <p role="alert" className="rounded-md bg-signal-wash px-3 py-2 text-sm font-medium text-signal">
         {state.error}
       </p>
     );
   }
   if (state?.ok && success) {
     return (
-      <p role="status" className="rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+      <p role="status" className="rounded-md bg-ok-wash px-3 py-2 text-sm font-medium text-ok">
         {success}
       </p>
     );

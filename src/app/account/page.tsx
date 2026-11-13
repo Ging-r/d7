@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { startPayoutOnboardingAction, updateProfileAction } from "@/actions/account";
 import { SubmitButton } from "@/components/forms";
+import { Icon } from "@/components/Icon";
 import { ProfileForm } from "@/components/ProfileForm";
-import { Alert } from "@/components/ui";
+import { Alert, Section, Stat } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
 import { PLATFORM_FEE_PERCENT } from "@/lib/config";
 import { db } from "@/lib/db";
@@ -25,51 +26,58 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
   });
 
   return (
-    <div className="mx-auto flex max-w-2xl flex-col gap-6">
+    <div className="mx-auto flex max-w-4xl flex-col gap-10">
       <h1 className="page-title">Account</h1>
 
-      <section className="card flex flex-col gap-4 p-5">
-        <div>
-          <h2 className="text-lg font-semibold">Payouts</h2>
-          <p className="text-sm text-stone-600">
-            To rent out costumes you need a payout account, so we can send you your share ({100 - PLATFORM_FEE_PERCENT}% of each rental). It&apos;s run
-            by Stripe, our payment provider, and takes a few minutes with BankID or your ID.
-          </p>
-        </div>
-        {payouts === "pending" && !payoutsEnabled && (
-          <Alert tone="warn">Stripe still needs a few details, or is reviewing them. You can continue where you left off below.</Alert>
-        )}
-        {payoutsEnabled ? (
+      <Section
+        title="Payouts"
+        description={
           <>
-            <Alert tone="good">✓ Payouts are set up. You can accept rental requests.</Alert>
-            <p className="text-sm text-stone-600">
-              Paid out so far: <strong>{formatSEK(earnings._sum.ownerPayout ?? 0)}</strong> from {earnings._count}{" "}
-              {earnings._count === 1 ? "rental" : "rentals"}.
-            </p>
-            {!isMockPayments() && (
-              <a href="/account/payouts/dashboard" className="btn-secondary self-start">
-                Open payout dashboard ↗
-              </a>
-            )}
+            To rent out costumes you need a payout account, so we can send you your share ({100 - PLATFORM_FEE_PERCENT}% of each rental). It&apos;s run by
+            Stripe, our payment provider, and takes a few minutes with BankID or your ID.
           </>
-        ) : (
-          <form action={startPayoutOnboardingAction}>
-            <SubmitButton pendingText="Opening Stripe…">{user.stripeAccountId ? "Continue payout setup" : "Set up payouts"}</SubmitButton>
-            {isMockPayments() && <p className="hint mt-2">Demo mode: this completes instantly.</p>}
-          </form>
-        )}
-      </section>
+        }
+      >
+        <div className="flex flex-col gap-5">
+          {payouts === "pending" && !payoutsEnabled && (
+            <Alert tone="warn">Stripe still needs a few details, or is reviewing them. You can continue where you left off below.</Alert>
+          )}
+          {payoutsEnabled ? (
+            <>
+              <Alert tone="good">Payouts are set up. You can accept rental requests.</Alert>
+              <dl className="flex gap-12">
+                <Stat label="Paid out so far" value={formatSEK(earnings._sum.ownerPayout ?? 0)} />
+                <Stat label={earnings._count === 1 ? "Rental" : "Rentals"} value={earnings._count} />
+              </dl>
+              {!isMockPayments() && (
+                <a href="/account/payouts/dashboard" className="btn-secondary self-start">
+                  Open payout dashboard
+                  <Icon name="arrow-up-right" />
+                </a>
+              )}
+            </>
+          ) : (
+            <form action={startPayoutOnboardingAction}>
+              <SubmitButton pendingText="Opening Stripe…">{user.stripeAccountId ? "Continue payout setup" : "Set up payouts"}</SubmitButton>
+              {isMockPayments() && <p className="hint mt-2">Demo mode: this completes instantly.</p>}
+            </form>
+          )}
+        </div>
+      </Section>
 
-      <section className="card p-5">
-        <h2 className="mb-4 text-lg font-semibold">Profile</h2>
+      <Section
+        title="Profile"
+        description={
+          <>
+            Signed in as {user.email}.{" "}
+            <Link href={`/users/${user.id}`} className="link text-ink">
+              View public profile
+            </Link>
+          </>
+        }
+      >
         <ProfileForm action={updateProfileAction} name={user.name} bio={user.bio} />
-        <p className="mt-4 text-sm text-stone-500">
-          Signed in as {user.email} ·{" "}
-          <Link href={`/users/${user.id}`} className="text-brand-700 hover:underline">
-            View public profile
-          </Link>
-        </p>
-      </section>
+      </Section>
     </div>
   );
 }

@@ -2,8 +2,9 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { Avatar } from "@/components/ui";
 
-export function AccountMenu({ initial, children }: { initial: string; children: React.ReactNode }) {
+export function AccountMenu({ name, children }: { name: string; children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const ref = useRef<HTMLDivElement>(null);
@@ -31,11 +32,23 @@ export function AccountMenu({ initial, children }: { initial: string; children: 
 
   return (
     <div ref={ref} className="relative">
-      <button type="button" className="btn-ghost px-2" aria-label="Account menu" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
-        <span className="flex size-8 items-center justify-center rounded-full bg-brand-100 font-semibold text-brand-800">{initial}</span>
+      <button
+        type="button"
+        className="flex size-10 items-center justify-center rounded-full transition-shadow hover:ring-2 hover:ring-ink aria-expanded:ring-2 aria-expanded:ring-ink"
+        aria-label="Account menu"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+      >
+        <Avatar name={name} size="sm" />
       </button>
       {open && (
-        <div className="absolute right-0 mt-2 w-52 overflow-hidden rounded-xl border border-stone-200 bg-white py-1 shadow-lg">{children}</div>
+        <div className="absolute right-0 mt-2 w-56 overflow-hidden rounded-lg border border-line bg-surface py-1 shadow-[0_12px_32px_-8px_rgb(26_24_20/0.25)]">
+          <p className="border-b border-line px-4 pt-2 pb-3 text-sm">
+            <span className="eyebrow block">Signed in as</span>
+            <span className="font-semibold">{name}</span>
+          </p>
+          {children}
+        </div>
       )}
     </div>
   );

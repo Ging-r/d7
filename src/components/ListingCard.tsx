@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { CostumeImage } from "@/components/ui";
-import { themeById } from "@/lib/config";
+import { CostumeImage, PriceTag } from "@/components/ui";
+import { sizeLabel } from "@/lib/config";
 import { formatDistance } from "@/lib/geo";
-import { formatSEK } from "@/lib/pricing";
 
 export interface ListingCardData {
   id: string;
@@ -18,42 +17,30 @@ export interface ListingCardData {
 }
 
 export function ListingCard({ listing }: { listing: ListingCardData }) {
-  const theme = themeById(listing.theme);
+  const hidden = listing.active === false;
+  const where = listing.distanceKm != null ? `${formatDistance(listing.distanceKm)} away` : listing.areaLabel;
   return (
-    <Link
-      href={`/costumes/${listing.id}`}
-      className="group card flex flex-col overflow-hidden transition hover:-translate-y-0.5 hover:shadow-md"
-    >
-      <div className="relative">
+    <Link href={`/costumes/${listing.id}`} className="group flex flex-col gap-2.5">
+      <div className="relative overflow-hidden rounded-lg">
         <CostumeImage
           filename={listing.photos[0]?.filename}
           theme={listing.theme}
           alt={listing.title}
-          className="aspect-[4/5] w-full transition group-hover:brightness-105"
+          className={`aspect-[4/5] w-full transition-transform duration-300 ease-out group-hover:scale-[1.03] ${hidden ? "opacity-40 grayscale" : ""}`}
         />
-        {listing.active === false && (
-          <span className="absolute top-2 left-2 rounded-full bg-stone-900/80 px-2 py-0.5 text-xs font-semibold text-white">Hidden</span>
+        {hidden && (
+          <span className="absolute top-2.5 left-2.5 rounded-sm bg-ink px-2 py-1 text-[11px] leading-none font-semibold tracking-wide text-paper uppercase">
+            Hidden
+          </span>
         )}
-        <span className="absolute right-2 bottom-2 rounded-full bg-white/90 px-2 py-0.5 text-xs font-semibold text-stone-800 shadow-sm">
-          Size {listing.size}
-        </span>
+        <PriceTag price={listing.price} days={listing.includedDays} className="absolute bottom-2.5 left-2.5 text-[1.375rem]" />
       </div>
-      <div className="flex flex-1 flex-col gap-1 p-3">
-        <p className="line-clamp-1 font-semibold">{listing.title}</p>
-        <p className="text-xs text-stone-500">
-          {theme.emoji} {theme.label}
+      <div className="min-w-0">
+        <p className="truncate font-semibold decoration-2 underline-offset-2 group-hover:underline">{listing.title}</p>
+        <p className="truncate text-[13px] text-muted">
+          {sizeLabel(listing.size)}
+          {where && ` · ${where}`}
         </p>
-        <div className="mt-auto flex flex-wrap items-end justify-between gap-x-2 gap-y-0.5 pt-2">
-          <p className="text-sm whitespace-nowrap">
-            <span className="font-bold">{formatSEK(listing.price)}</span>
-            <span className="text-stone-500"> / {listing.includedDays}d</span>
-          </p>
-          {(listing.distanceKm != null || listing.areaLabel) && (
-            <p className="truncate text-xs text-stone-500">
-              📍 {listing.distanceKm != null ? formatDistance(listing.distanceKm) : listing.areaLabel}
-            </p>
-          )}
-        </div>
       </div>
     </Link>
   );
@@ -61,7 +48,7 @@ export function ListingCard({ listing }: { listing: ListingCardData }) {
 
 export function ListingGrid({ listings }: { listings: ListingCardData[] }) {
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
       {listings.map((l) => (
         <ListingCard key={l.id} listing={l} />
       ))}

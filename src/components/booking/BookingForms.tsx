@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { FormMessage, SubmitButton, submitWithoutReset } from "@/components/forms";
+import { StarIcon } from "@/components/Icon";
 import type { ActionState } from "@/lib/errors";
 import { formatSEK } from "@/lib/pricing";
 
@@ -33,7 +34,7 @@ export function MessageForm({ action }: { action: FormAction }) {
             if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) e.currentTarget.form?.requestSubmit();
           }}
         />
-        <SubmitButton pending={pending} pendingText="…" className="btn-primary h-11 shrink-0">
+        <SubmitButton pending={pending} pendingText="…" className="btn-primary shrink-0">
           Send
         </SubmitButton>
       </div>
@@ -53,8 +54,8 @@ export function DamageForm({ action, deposit }: { action: FormAction; deposit: n
     );
   }
   return (
-    <form onSubmit={submitWithoutReset(formAction)} className="flex flex-col gap-3 rounded-xl border border-red-200 bg-red-50/50 p-3">
-      <p className="text-sm text-stone-700">
+    <form onSubmit={submitWithoutReset(formAction)} className="flex w-full flex-col gap-3 rounded-md border border-signal/30 bg-surface p-4">
+      <p className="text-sm text-ink-soft">
         Claim part or all of the {formatSEK(deposit)} deposit. An admin reviews every claim and reads the chat, so attach details there too.
       </p>
       <div>
@@ -91,10 +92,11 @@ export function ReviewForm({ action, subjectName }: { action: FormAction; subjec
         <legend className="label">How was renting with {subjectName}?</legend>
         <div className="flex gap-1">
           {[1, 2, 3, 4, 5].map((n) => (
-            <label key={n} className="cursor-pointer text-3xl leading-none">
+            <label key={n} className="cursor-pointer rounded-sm has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ink">
               <input type="radio" name="rating" value={n} className="sr-only" onChange={() => setRating(n)} required />
-              <span className={n <= rating ? "text-amber-500" : "text-stone-300 hover:text-amber-300"} aria-label={`${n} stars`}>
-                ★
+              <StarIcon className={`size-8 transition-colors ${n <= rating ? "text-ink" : "text-line-strong hover:text-tag-deep"}`} />
+              <span className="sr-only">
+                {n} {n === 1 ? "star" : "stars"}
               </span>
             </label>
           ))}

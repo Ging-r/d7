@@ -24,18 +24,18 @@ export const MAX_PHOTOS = 6;
 export const MAX_PHOTO_BYTES = 8 * 1024 * 1024;
 
 export const THEMES = [
-  { id: "sittning", label: "Sittning & formal", emoji: "🎩" },
-  { id: "superheroes", label: "Superheroes", emoji: "🦸" },
-  { id: "movies-tv", label: "Movies & TV", emoji: "🎬" },
-  { id: "decades", label: "Decades (60s–00s)", emoji: "🕺" },
-  { id: "halloween", label: "Halloween & horror", emoji: "🎃" },
-  { id: "fantasy", label: "Fantasy & fairy tale", emoji: "🧚" },
-  { id: "animals", label: "Animals", emoji: "🦁" },
-  { id: "historical", label: "Historical", emoji: "🏰" },
-  { id: "professions", label: "Uniforms & professions", emoji: "👩‍🚒" },
-  { id: "sports", label: "Sports", emoji: "⚽" },
-  { id: "accessories", label: "Accessories & wigs", emoji: "👑" },
-  { id: "other", label: "Other", emoji: "✨" },
+  { id: "sittning", label: "Sittning & formal" },
+  { id: "superheroes", label: "Superheroes" },
+  { id: "movies-tv", label: "Movies & TV" },
+  { id: "decades", label: "Decades (60s–00s)" },
+  { id: "halloween", label: "Halloween & horror" },
+  { id: "fantasy", label: "Fantasy & fairy tale" },
+  { id: "animals", label: "Animals" },
+  { id: "historical", label: "Historical" },
+  { id: "professions", label: "Uniforms & professions" },
+  { id: "sports", label: "Sports" },
+  { id: "accessories", label: "Accessories & wigs" },
+  { id: "other", label: "Other" },
 ] as const;
 
 export type ThemeId = (typeof THEMES)[number]["id"];
@@ -47,3 +47,7 @@ export function themeById(id: string) {
 }
 
 export const SIZES = ["XS", "S", "M", "L", "XL", "XXL", "One size"] as const;
+
+export function sizeLabel(size: string) {
+  return size === "One size" ? size : `Size ${size}`;
+}

@@ -11,14 +11,14 @@ export const metadata: Metadata = { title: "Rent out a costume" };
 export default async function NewCostumePage() {
   const user = await requireUser("/costumes/new");
   return (
-    <div className="mx-auto flex max-w-3xl flex-col gap-6">
+    <div className="mx-auto flex max-w-4xl flex-col gap-8">
       <div>
         <h1 className="page-title">Rent out a costume</h1>
-        <p className="mt-1 text-stone-600">Earn back what you paid for it — it only takes a couple of minutes.</p>
+        <p className="mt-3 text-lg text-ink-soft">Earn back what you paid for it. Listing takes a couple of minutes and costs nothing.</p>
       </div>
       {!user.payoutsEnabled && (
         <Alert tone="info">
-          You can publish now, but you&apos;ll need to <Link href="/account" className="font-semibold underline">set up payouts</Link> before you can
+          You can publish now, but you&apos;ll need to <Link href="/account" className="link">set up payouts</Link> before you can
           accept your first request.
         </Alert>
       )}

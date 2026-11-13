@@ -6,7 +6,7 @@ import type { LeafletMapProps } from "./LeafletMap";
 // Leaflet touches `window` on import, so it only loads in the browser.
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
-  loading: () => <div className="h-64 w-full animate-pulse rounded-xl bg-stone-200" />,
+  loading: () => <div className="h-64 w-full animate-pulse rounded-md bg-line" />,
 });
 
 export function CostumeMap(props: LeafletMapProps) {

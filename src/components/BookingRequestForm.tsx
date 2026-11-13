@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { FormMessage, SubmitButton, submitWithoutReset } from "@/components/forms";
+import { ReceiptRow } from "@/components/ui";
 import { addDays, daysBetween, formatDateRange, rangesOverlap } from "@/lib/dates";
 import type { ActionState } from "@/lib/errors";
 import { formatSEK, quote, type PricedListing } from "@/lib/pricing";
@@ -68,32 +69,26 @@ export function BookingRequestForm({
         </div>
       </div>
 
-      {conflict && <p className="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900">The costume is already booked for some of these days.</p>}
+      {conflict && <p className="rounded-md bg-tag-wash px-3 py-2 text-sm font-medium">The costume is already booked for some of these days.</p>}
       {tooLong && (
-        <p className="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900">
+        <p className="rounded-md bg-tag-wash px-3 py-2 text-sm font-medium">
           This costume can be rented for at most {maxDays} {maxDays === 1 ? "day" : "days"}.
         </p>
       )}
 
       {q && !conflict && (
-        <dl className="flex flex-col gap-1 rounded-xl bg-stone-50 p-3 text-sm">
-          <div className="flex justify-between">
-            <dt>
-              Rental, {q.days} {q.days === 1 ? "day" : "days"}
-              {q.extraDays > 0 && <span className="text-stone-500"> (incl. {q.extraDays} extra)</span>}
-            </dt>
-            <dd>{formatSEK(q.rentalAmount)}</dd>
-          </div>
-          {q.depositAmount > 0 && (
-            <div className="flex justify-between text-stone-600">
-              <dt>Refundable deposit</dt>
-              <dd>{formatSEK(q.depositAmount)}</dd>
-            </div>
-          )}
-          <div className="mt-1 flex justify-between border-t border-stone-200 pt-1 font-semibold">
-            <dt>Total</dt>
-            <dd>{formatSEK(q.total)}</dd>
-          </div>
+        <dl className="flex flex-col gap-1.5 rounded-md bg-paper p-4 text-sm">
+          <ReceiptRow
+            label={
+              <>
+                Rental, {q.days} {q.days === 1 ? "day" : "days"}
+                {q.extraDays > 0 && <span className="text-muted"> (incl. {q.extraDays} extra)</span>}
+              </>
+            }
+            value={formatSEK(q.rentalAmount)}
+          />
+          {q.depositAmount > 0 && <ReceiptRow label="Refundable deposit" value={formatSEK(q.depositAmount)} muted />}
+          <ReceiptRow label="Total" value={formatSEK(q.total)} total />
         </dl>
       )}
 
@@ -112,14 +107,14 @@ export function BookingRequestForm({
       </div>
 
       <FormMessage state={state} />
-      <SubmitButton pending={pending} pendingText="Sending request…" className="btn-primary w-full py-3">
+      <SubmitButton pending={pending} pendingText="Sending request…" className="btn-primary btn-lg w-full">
         Request to rent
       </SubmitButton>
-      <p className="text-center text-xs text-stone-500">You won&apos;t pay anything until the owner accepts.</p>
+      <p className="text-center text-xs text-muted">You won&apos;t pay anything until the owner accepts.</p>
 
       {blocked.length > 0 && (
-        <div className="text-xs text-stone-500">
-          <p className="font-medium text-stone-600">Already booked:</p>
+        <div className="border-t border-line pt-4 text-sm text-ink-soft">
+          <p className="eyebrow mb-1">Already booked</p>
           <ul>
             {blocked.map((b) => (
               <li key={`${b.startDate}-${b.endDate}`}>{formatDateRange(b.startDate, b.endDate)}</li>
