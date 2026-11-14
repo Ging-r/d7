@@ -36,8 +36,8 @@ export function ListingCard({ listing }: { listing: ListingCardData }) {
         <PriceTag price={listing.price} days={listing.includedDays} className="absolute bottom-2.5 left-2.5 text-[1.375rem]" />
       </div>
       <div className="min-w-0">
-        <p className="truncate font-semibold decoration-2 underline-offset-2 group-hover:underline">{listing.title}</p>
-        <p className="truncate text-[13px] text-muted">
+        <p className="line-clamp-2 leading-snug font-semibold decoration-2 underline-offset-2 group-hover:underline">{listing.title}</p>
+        <p className="mt-0.5 truncate text-[13px] text-muted">
           {sizeLabel(listing.size)}
           {where && ` · ${where}`}
         </p>

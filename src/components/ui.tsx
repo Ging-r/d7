@@ -49,7 +49,7 @@ export function Stars({ rating, size = "sm" }: { rating: number; size?: "sm" | "
 export function RatingLine({ rating }: { rating?: { average: number; count: number } }) {
   if (!rating || rating.count === 0) return <span className="text-sm text-muted">No reviews yet</span>;
   return (
-    <span className="inline-flex items-center gap-1 text-sm font-semibold">
+    <span className="inline-flex items-center gap-1 text-sm font-semibold text-ink">
       <StarIcon className="size-3.5" />
       {rating.average.toFixed(1)}
       <span className="font-normal text-muted">

@@ -47,7 +47,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
               <Alert tone="good">Payouts are set up. You can accept rental requests.</Alert>
               <dl className="flex gap-12">
                 <Stat label="Paid out so far" value={formatSEK(earnings._sum.ownerPayout ?? 0)} />
-                <Stat label={earnings._count === 1 ? "Rental" : "Rentals"} value={earnings._count} />
+                <Stat label="Rentals" value={earnings._count} />
               </dl>
               {!isMockPayments() && (
                 <a href="/account/payouts/dashboard" className="btn-secondary self-start">

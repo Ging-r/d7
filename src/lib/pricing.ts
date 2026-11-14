@@ -39,8 +39,3 @@ export function quote(listing: PricedListing, days: number, feePercent: number):
 export function formatSEK(amount: number): string {
   return `${new Intl.NumberFormat("sv-SE", { maximumFractionDigits: 0 }).format(amount)} kr`;
 }
-
-export function describePricing(listing: PricedListing): string {
-  const base = `${formatSEK(listing.price)} for up to ${listing.includedDays} ${listing.includedDays === 1 ? "day" : "days"}`;
-  return listing.extraDayPrice == null ? base : `${base}, then ${formatSEK(listing.extraDayPrice)}/day`;
-}

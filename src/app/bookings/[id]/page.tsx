@@ -115,6 +115,7 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
         <section>
           <h2 className="section-title">Chat{role ? ` with ${other.name}` : ""}</h2>
           <div className="mt-4 border-t-[3px] border-ink pt-5">
+            {booking.messages.length === 0 && <p className="text-sm text-muted">No messages yet.</p>}
             <ul className="flex flex-col gap-3">
               {booking.messages.map((m) =>
                 m.senderId == null ? (
@@ -206,14 +207,14 @@ function Progress({ status }: { status: BookingStatus }) {
         const next = i === reached + 1;
         return (
           <li key={m.status} aria-current={next ? "step" : undefined} className="relative flex flex-col items-center gap-2 text-center">
-            {i > 0 && <span aria-hidden className={`absolute top-[9px] right-1/2 -left-1/2 h-0.5 ${done ? "bg-ink" : "bg-line-strong"}`} />}
+            {i > 0 && <span aria-hidden className={`absolute top-[11px] right-1/2 -left-1/2 h-0.5 ${done ? "bg-ink" : "bg-line-strong"}`} />}
             <span
               aria-hidden
-              className={`relative flex size-5 items-center justify-center rounded-full ${
+              className={`relative z-10 flex size-6 items-center justify-center rounded-full ${
                 done ? "bg-ink text-paper" : next ? (disputed ? "bg-signal" : "bg-tag ring-2 ring-ink ring-inset") : "bg-paper ring-2 ring-line-strong ring-inset"
               }`}
             >
-              {done && <Icon name="check" className="size-3 stroke-[3]" />}
+              {done && <Icon name="check" className="size-3.5 stroke-[3]" />}
             </span>
             <span className={`text-xs ${done || next ? "font-semibold" : "text-muted"} ${next && disputed ? "text-signal" : ""}`}>
               {next && disputed ? "Damage claim" : m.label}
@@ -230,7 +231,7 @@ function NextStep({ booking, role }: { booking: FullBooking; role: Role }) {
   const total = booking.rentalAmount + booking.depositAmount;
   const otherName = role === "owner" ? booking.renter.name : booking.owner.name;
   const cancel = (label: string, confirm: string) => (
-    <ActionButton action={cancelAction.bind(null, id)} confirm={confirm} className="btn-ghost text-signal hover:text-signal" pendingText="Cancelling…">
+    <ActionButton action={cancelAction.bind(null, id)} confirm={confirm} className="btn-danger" pendingText="Cancelling…">
       {label}
     </ActionButton>
   );

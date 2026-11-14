@@ -40,6 +40,14 @@ npm run make-admin -- someone@example.com
 
 Client components may only import pure modules: `booking-status.ts`, `pricing.ts`, `dates.ts`, `geo.ts`, `config.ts`, `photos.ts`. Never `db.ts`, `payments.ts`, `uploads.ts` or `bookings.ts`.
 
+### UI (`src/app/globals.css`, `src/components/ui.tsx`, `src/components/Icon.tsx`)
+
+- The look is a wardrobe rental tag: paper, ink and one tag yellow, with headlines set like a party poster. Colours are the tokens in `@theme` (`paper`, `surface`, `ink`, `ink-soft`, `muted`, `line`, `tag`, `signal`, `ok`). Don't reach for Tailwind's stock palette. `signal` is for "needs attention" and errors only.
+- Headlines use the `display` utility (League Gothic, uppercase). It has a single weight, so never add `font-bold` to it. Everything else is Libre Franklin. Both load through `next/font` in `layout.tsx`.
+- No emoji as icons. Use `Icon` (line icons), `Hanger`, or plain text.
+- Listing prices go on a `PriceTag`. A listing without photos gets `CostumeImage`'s hanger on coloured paper, one stock colour per theme.
+- Sections are separated by rules (`border-t-[3px] border-ink` above a section, `border-line` between rows) instead of being boxed in cards. `card` is for panels that sit beside the content, like the booking form and the receipt.
+
 ### Booking state machine (`src/lib/bookings.ts`, `src/lib/booking-status.ts`)
 
 ```

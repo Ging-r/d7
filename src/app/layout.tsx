@@ -49,7 +49,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <FooterLink href="/account">Account &amp; payouts</FooterLink>
             </FooterNav>
           </div>
-          <p className="mx-auto max-w-6xl border-t border-paper/15 px-4 py-5 text-xs text-paper/60">Made by students in Lund, for students in Lund.</p>
+          <div className="mx-auto max-w-6xl px-4">
+            <p className="border-t border-paper/15 py-5 text-xs text-paper/60">Made by students in Lund, for students in Lund.</p>
+          </div>
         </footer>
       </body>
     </html>

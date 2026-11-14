@@ -76,7 +76,7 @@ export default async function CostumePage({ params }: Props) {
               <PriceTag price={listing.price} days={listing.includedDays} className="text-3xl" />
               {listing.extraDayPrice != null && <span className="text-sm text-ink-soft">then {formatSEK(listing.extraDayPrice)} per extra day</span>}
             </div>
-            <dl className="mt-6 grid grid-cols-2 gap-x-6 border-t-[3px] border-ink sm:grid-cols-4">
+            <dl className="mt-6 grid grid-cols-2 border-t-[3px] border-ink sm:grid-cols-4">
               <Spec label="Size" value={listing.size} />
               <Spec label="Theme" value={theme.label} />
               <Spec label="Pick up" value={listing.areaLabel || "Lund"} />
@@ -186,7 +186,7 @@ export default async function CostumePage({ params }: Props) {
 
 function Spec({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
-    <div className="border-b border-line py-3">
+    <div className="border-b border-line py-3 pr-4">
       <dt className="eyebrow">{label}</dt>
       <dd className="mt-1 font-semibold">
         {value}

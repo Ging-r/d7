@@ -45,9 +45,10 @@ export function StarIcon({ className = "size-4" }: { className?: string }) {
 /** A wire hanger: the stand-in for a costume that has no photo. */
 export function Hanger({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 120 76" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden className={className}>
-      <path d="M52 12a8 8 0 1 1 12.5 6.6C61.5 20.7 60 22.5 60 25.5V30" />
-      <path d="M60 30 110.5 59c5 2.9 3 10.5-2.8 10.5H12.3C6.5 69.5 4.5 61.9 9.5 59L60 30Z" />
+    <svg viewBox="0 0 120 76" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden className={className}>
+      {/* The wire keeps its thickness whether the hanger is a thumbnail or fills a gallery. */}
+      <path vectorEffect="non-scaling-stroke" d="M52 12a8 8 0 1 1 12.5 6.6C61.5 20.7 60 22.5 60 25.5V30" />
+      <path vectorEffect="non-scaling-stroke" d="M60 30 110.5 59c5 2.9 3 10.5-2.8 10.5H12.3C6.5 69.5 4.5 61.9 9.5 59L60 30Z" />
     </svg>
   );
 }
